@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: registry
+
+  liquibase:
+    change-log: classpath:/db/changelog/master.xml
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_registry?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: root
+
+registry:
+  account:
+    default-status-create: ACTIVE
