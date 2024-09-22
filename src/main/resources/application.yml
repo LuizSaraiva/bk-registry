@@ -12,3 +12,15 @@ spring:
 registry:
   account:
     default-status-create: ACTIVE
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+  broker:
+    exchange: ex.registry
+    queue:
+      account: queue.registry.account
+    routing:
+      account: routing.registry.account

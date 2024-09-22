@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="2" author="Luiz">
+        <createTable tableName="tb_outbox_registry">
+            <column name="id" type="binary(16)">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="id_ref" type="binary(16)">
+                <constraints nullable="false" />
+            </column>
+            <column name="message" type="json"/>
+            <column name="create_date" type="timestamp" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="timestamp" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="sent" type="bool" />
+            <column name="type" type="char(2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
