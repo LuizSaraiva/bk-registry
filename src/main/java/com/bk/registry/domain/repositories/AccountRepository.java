@@ -1,6 +1,6 @@
 package com.bk.registry.domain.repositories;
 
-import com.bk.registry.domain.domain.Account;
+import com.bk.registry.domain.entity.Account;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

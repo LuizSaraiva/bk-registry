@@ -1,4 +1,4 @@
-package com.bk.registry.api.mapper.dto;
+package com.bk.registry.mapper.dto;
 
 import com.bk.registry.api.enums.TypeAccount;
 import jakarta.validation.constraints.NotBlank;

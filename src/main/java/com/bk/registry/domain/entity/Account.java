@@ -1,4 +1,4 @@
-package com.bk.registry.domain.domain;
+package com.bk.registry.domain.entity;
 
 import com.bk.registry.api.enums.TypeAccount;
 import com.bk.registry.domain.enums.StatusAccount;

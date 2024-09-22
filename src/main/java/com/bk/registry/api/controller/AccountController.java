@@ -1,14 +1,14 @@
 package com.bk.registry.api.controller;
 
-import com.bk.registry.api.mapper.AccountMapper;
-import com.bk.registry.api.mapper.StatusAccountMapper;
-import com.bk.registry.api.mapper.dto.AccountRequestDTO;
-import com.bk.registry.api.mapper.dto.AccountRequestUpdateDTO;
-import com.bk.registry.api.mapper.dto.AccountResponseDTO;
-import com.bk.registry.api.mapper.dto.UpdateStatusDTO;
-import com.bk.registry.domain.domain.Account;
+import com.bk.registry.domain.entity.Account;
 import com.bk.registry.domain.exceptions.AccountAlreadyExistsException;
 import com.bk.registry.domain.services.AccountService;
+import com.bk.registry.mapper.AccountMapper;
+import com.bk.registry.mapper.StatusAccountMapper;
+import com.bk.registry.mapper.dto.AccountRequestDTO;
+import com.bk.registry.mapper.dto.AccountRequestUpdateDTO;
+import com.bk.registry.mapper.dto.AccountResponseDTO;
+import com.bk.registry.mapper.dto.UpdateStatusDTO;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;

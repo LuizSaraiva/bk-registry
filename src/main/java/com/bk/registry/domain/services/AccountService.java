@@ -1,7 +1,7 @@
 package com.bk.registry.domain.services;
 
 import com.bk.registry.api.enums.StatusAccountApi;
-import com.bk.registry.domain.domain.Account;
+import com.bk.registry.domain.entity.Account;
 
 import java.util.List;
 import java.util.Optional;
