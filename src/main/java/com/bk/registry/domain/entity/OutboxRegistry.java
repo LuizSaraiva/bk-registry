@@ -1,6 +1,8 @@
 package com.bk.registry.domain.entity;
 
+import com.bk.registry.domain.enums.TypeEvent;
 import com.bk.registry.domain.enums.TypeOutbox;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,4 +25,6 @@ public class OutboxRegistry {
     private boolean sent;
     @Enumerated(EnumType.STRING)
     private TypeOutbox type;
+    @Enumerated(EnumType.STRING)
+    private TypeEvent typeEvent;
 }

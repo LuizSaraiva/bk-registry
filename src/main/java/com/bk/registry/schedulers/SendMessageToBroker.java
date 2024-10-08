@@ -1,9 +1,12 @@
 package com.bk.registry.schedulers;
 
+import com.bk.registry.convert.JsonConverter;
 import com.bk.registry.domain.entity.OutboxRegistry;
 import com.bk.registry.domain.enums.TypeOutbox;
 import com.bk.registry.domain.publishers.EventPublisher;
 import com.bk.registry.domain.services.OutboxRegistryService;
+import com.bk.registry.mapper.AccountMessageMapper;
+import com.bk.registry.mapper.dto.messaging.MessageDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,26 +33,31 @@ public class SendMessageToBroker {
     @Autowired
     private OutboxRegistryService outboxRegistryService;
 
+    @Autowired
+    private AccountMessageMapper messageMapper;
+
     @Scheduled(initialDelay = 10, fixedDelay = 20, timeUnit = TimeUnit.SECONDS)
-    public void scheduleOutbox(){
+    public void scheduleOutbox() {
 
         List<OutboxRegistry> outboxNotSent = outboxRegistryService.getOutboxNotSent();
-        log.info(String.format("%s messages found to be sent to the broker",outboxNotSent.size()));
+        log.info(String.format("%s messages found to be sent to the broker", outboxNotSent.size()));
 
         try {
-            outboxNotSent.forEach(outbox ->{setRoutingKeyAndSendMessage(outbox);});
-        }catch (RuntimeException ex){
+            outboxNotSent.forEach(outbox -> {setRoutingKeyAndSendMessage(outbox);});
+        } catch (RuntimeException ex) {
             log.error(ex);
         }
 
     }
 
-    private void setRoutingKeyAndSendMessage(OutboxRegistry outboxRegistry){
+    private void setRoutingKeyAndSendMessage(OutboxRegistry outboxRegistry) {
         TypeOutbox outboxRegistryType = outboxRegistry.getType();
 
-        switch (outboxRegistryType){
+        MessageDTO messageDTO = messageMapper.accountMessageDTOToMessageBroker(outboxRegistry);
+
+        switch (outboxRegistryType) {
             case ACCOUNT -> {
-                eventPublisher.publisherEvent(exchangeRegistry, routingAccount, outboxRegistry.getMessage());
+                eventPublisher.publisherEvent(exchangeRegistry, routingAccount, messageDTO);
                 outboxRegistry.setSent(true);
                 outboxRegistry.setUpdate_date(OffsetDateTime.now());
                 outboxRegistryService.saveOutbox(outboxRegistry);

@@ -13,7 +13,7 @@ public class EventPublisher{
     @Autowired
     RabbitTemplate rabbitTemplate;
 
-    public void publisherEvent(String exchangeRegistry, String routingAccount, String message){
+    public void publisherEvent(String exchangeRegistry, String routingAccount, Object message){
         rabbitTemplate.convertAndSend(exchangeRegistry, routingAccount, message);
         log.info(String.format("Sending Message: %s", message));
     }

@@ -5,6 +5,7 @@ import com.bk.registry.convert.JsonConverter;
 import com.bk.registry.domain.entity.Account;
 import com.bk.registry.domain.entity.OutboxRegistry;
 import com.bk.registry.domain.enums.StatusAccount;
+import com.bk.registry.domain.enums.TypeEvent;
 import com.bk.registry.domain.enums.TypeOutbox;
 import com.bk.registry.domain.exceptions.AccountAlreadyExistsException;
 import com.bk.registry.domain.exceptions.AccountNotFoundException;
@@ -12,9 +13,12 @@ import com.bk.registry.domain.exceptions.enums.ExceptionMessage;
 import com.bk.registry.domain.repositories.AccountRepository;
 import com.bk.registry.domain.services.AccountService;
 import com.bk.registry.domain.services.OutboxRegistryService;
+import com.bk.registry.mapper.AccountMessageMapper;
 import com.bk.registry.mapper.OutboxMapper;
 import com.bk.registry.mapper.StatusAccountMapper;
+import com.bk.registry.mapper.dto.messaging.AccountMessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
@@ -33,6 +37,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private OutboxMapper outboxMapper;
+
+    @Autowired
+    private AccountMessageMapper accountMessageMapper;
 
     @Autowired
     JsonConverter jsonConverter;
@@ -64,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
 
         final var accountSaved = setConfigsAndSaveAccount(account);
 
-        OutboxRegistry outboxRegistry = createOutbox(accountSaved);
+        OutboxRegistry outboxRegistry = createOutbox(accountSaved, TypeEvent.CREATE);
 
         outboxRegistryService.saveOutbox(outboxRegistry);
         return accountSaved;
@@ -85,7 +92,6 @@ public class AccountServiceImpl implements AccountService {
         StatusAccount statusDomain = statusAccountMapper.statusApiToDomain(status);
         accountFound.get().setStatus(statusDomain);
         Account accountSaved = accountRepository.save(accountFound.get());
-        System.out.println(accountSaved);
     }
 
     @Override
@@ -109,16 +115,23 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findByDocument(account.getDocument()).isPresent();
     }
 
-    private OutboxRegistry createOutbox(Account account) {
-        OutboxRegistry outboxRegistry = outboxMapper.accountDomainToOutbox(account);
+    private OutboxRegistry createOutbox(Account account, TypeEvent typeEvent) {
+
+        AccountMessageDTO accountMessageDTO = accountMessageMapper.accountDomainToMessage(account);
+
+        OutboxRegistry outboxRegistry = outboxMapper.accountDomainToOutbox(accountMessageDTO);
         outboxRegistry.setType(TypeOutbox.ACCOUNT);
         outboxRegistry.setUpdate_date(OffsetDateTime.now());
+        outboxRegistry.setCreate_date(OffsetDateTime.now());
+        outboxRegistry.setTypeEvent(typeEvent);
+
         try {
-            String message = jsonConverter.toJson(account);
-            outboxRegistry.setMessage(message);
-        }catch (RuntimeException | JsonProcessingException ex){
-            log.error(ex);
+            String json = jsonConverter.toJson(accountMessageDTO);
+            outboxRegistry.setMessage(json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
+
         return outboxRegistry;
     }
 
