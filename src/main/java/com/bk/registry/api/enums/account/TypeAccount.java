@@ -1,4 +1,4 @@
-package com.bk.registry.domain.enums;
+package com.bk.registry.api.enums.account;
 
 public enum TypeAccount {
     PJ,

@@ -1,12 +1,11 @@
 package com.bk.registry.schedulers;
 
-import com.bk.registry.convert.JsonConverter;
-import com.bk.registry.domain.entity.OutboxRegistry;
+import com.bk.registry.domain.entity.account.OutboxRegistry;
 import com.bk.registry.domain.enums.TypeOutbox;
 import com.bk.registry.domain.publishers.EventPublisher;
-import com.bk.registry.domain.services.OutboxRegistryService;
+import com.bk.registry.domain.services.account.OutboxRegistryService;
 import com.bk.registry.mapper.AccountMessageMapper;
-import com.bk.registry.mapper.dto.messaging.MessageDTO;
+import com.bk.registry.mapper.dto.account.messaging.MessageDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

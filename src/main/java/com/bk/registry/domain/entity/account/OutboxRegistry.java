@@ -1,8 +1,7 @@
-package com.bk.registry.domain.entity;
+package com.bk.registry.domain.entity.account;
 
 import com.bk.registry.domain.enums.TypeEvent;
 import com.bk.registry.domain.enums.TypeOutbox;
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import jakarta.persistence.*;
 import lombok.Data;
 

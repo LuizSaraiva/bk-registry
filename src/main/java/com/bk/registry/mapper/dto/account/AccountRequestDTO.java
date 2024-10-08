@@ -1,7 +1,7 @@
-package com.bk.registry.mapper.dto;
+package com.bk.registry.mapper.dto.account;
 
-import com.bk.registry.api.enums.StatusAccountApi;
-import com.bk.registry.api.enums.TypeAccount;
+import com.bk.registry.api.enums.account.StatusAccountApi;
+import com.bk.registry.api.enums.account.TypeAccount;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

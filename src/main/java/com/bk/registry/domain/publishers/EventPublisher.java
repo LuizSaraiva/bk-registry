@@ -1,6 +1,5 @@
 package com.bk.registry.domain.publishers;
 
-import com.bk.registry.domain.entity.OutboxRegistry;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

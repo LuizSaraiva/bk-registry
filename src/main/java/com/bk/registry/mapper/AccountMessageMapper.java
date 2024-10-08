@@ -1,9 +1,9 @@
 package com.bk.registry.mapper;
 
-import com.bk.registry.domain.entity.Account;
-import com.bk.registry.domain.entity.OutboxRegistry;
-import com.bk.registry.mapper.dto.messaging.AccountMessageDTO;
-import com.bk.registry.mapper.dto.messaging.MessageDTO;
+import com.bk.registry.domain.entity.account.Account;
+import com.bk.registry.domain.entity.account.OutboxRegistry;
+import com.bk.registry.mapper.dto.account.messaging.AccountMessageDTO;
+import com.bk.registry.mapper.dto.account.messaging.MessageDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;

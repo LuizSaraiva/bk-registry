@@ -1,8 +1,8 @@
-package com.bk.registry.api.controller;
+package com.bk.registry.api.controller.account;
 
-import com.bk.registry.mapper.dto.AccountRequestDTO;
-import com.bk.registry.mapper.dto.AccountRequestUpdateDTO;
-import com.bk.registry.mapper.dto.UpdateStatusDTO;
+import com.bk.registry.mapper.dto.account.AccountRequestDTO;
+import com.bk.registry.mapper.dto.account.AccountRequestUpdateDTO;
+import com.bk.registry.mapper.dto.account.UpdateStatusDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

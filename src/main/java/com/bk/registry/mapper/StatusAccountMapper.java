@@ -1,7 +1,7 @@
 package com.bk.registry.mapper;
 
-import com.bk.registry.api.enums.StatusAccountApi;
-import com.bk.registry.domain.enums.StatusAccount;
+import com.bk.registry.api.enums.account.StatusAccountApi;
+import com.bk.registry.domain.enums.account.StatusAccount;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

@@ -1,13 +1,9 @@
 package com.bk.registry.mapper;
 
-import com.bk.registry.domain.entity.Account;
-import com.bk.registry.domain.entity.OutboxRegistry;
-import com.bk.registry.mapper.dto.messaging.AccountMessageDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bk.registry.domain.entity.account.OutboxRegistry;
+import com.bk.registry.mapper.dto.account.messaging.AccountMessageDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

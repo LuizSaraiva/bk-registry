@@ -1,10 +1,10 @@
 package com.bk.registry.mapper;
 
 
-import com.bk.registry.mapper.dto.AccountRequestDTO;
-import com.bk.registry.mapper.dto.AccountRequestUpdateDTO;
-import com.bk.registry.mapper.dto.AccountResponseDTO;
-import com.bk.registry.domain.entity.Account;
+import com.bk.registry.domain.entity.account.Account;
+import com.bk.registry.mapper.dto.account.AccountRequestDTO;
+import com.bk.registry.mapper.dto.account.AccountRequestUpdateDTO;
+import com.bk.registry.mapper.dto.account.AccountResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;

@@ -1,8 +1,8 @@
-package com.bk.registry.domain.services.Impl;
+package com.bk.registry.domain.services.account.Impl;
 
-import com.bk.registry.domain.entity.OutboxRegistry;
-import com.bk.registry.domain.repositories.OutboxRegistryRepository;
-import com.bk.registry.domain.services.OutboxRegistryService;
+import com.bk.registry.domain.entity.account.OutboxRegistry;
+import com.bk.registry.domain.repositories.account.OutboxRegistryRepository;
+import com.bk.registry.domain.services.account.OutboxRegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

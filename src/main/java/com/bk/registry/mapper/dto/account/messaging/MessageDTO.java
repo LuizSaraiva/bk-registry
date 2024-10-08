@@ -1,8 +1,7 @@
-package com.bk.registry.mapper.dto.messaging;
+package com.bk.registry.mapper.dto.account.messaging;
 
 import com.bk.registry.domain.enums.TypeMessageBroker;
 import com.fasterxml.jackson.annotation.JsonRawValue;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 

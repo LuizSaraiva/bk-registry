@@ -1,7 +1,5 @@
 package com.bk.registry.domain.exceptions;
 
-import com.bk.registry.domain.repositories.AccountRepository;
-
 import java.util.UUID;
 
 public class AccountNotFoundException extends BusinessException {

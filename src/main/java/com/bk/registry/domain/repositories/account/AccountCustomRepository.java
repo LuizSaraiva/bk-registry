@@ -1,4 +1,4 @@
-package com.bk.registry.domain.repositories;
+package com.bk.registry.domain.repositories.account;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

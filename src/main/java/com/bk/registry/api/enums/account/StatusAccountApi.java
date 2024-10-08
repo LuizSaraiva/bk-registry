@@ -1,4 +1,4 @@
-package com.bk.registry.api.enums;
+package com.bk.registry.api.enums.account;
 
 public enum StatusAccountApi {
     ACTIVE,

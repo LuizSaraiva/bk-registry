@@ -1,7 +1,7 @@
-package com.bk.registry.domain.entity;
+package com.bk.registry.domain.entity.account;
 
-import com.bk.registry.api.enums.TypeAccount;
-import com.bk.registry.domain.enums.StatusAccount;
+import com.bk.registry.api.enums.account.TypeAccount;
+import com.bk.registry.domain.enums.account.StatusAccount;
 import jakarta.persistence.*;
 import lombok.Data;
 

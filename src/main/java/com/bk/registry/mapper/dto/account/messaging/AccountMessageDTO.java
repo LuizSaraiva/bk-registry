@@ -1,7 +1,7 @@
-package com.bk.registry.mapper.dto.messaging;
+package com.bk.registry.mapper.dto.account.messaging;
 
-import com.bk.registry.api.enums.TypeAccount;
-import com.bk.registry.domain.enums.StatusAccount;
+import com.bk.registry.api.enums.account.TypeAccount;
+import com.bk.registry.domain.enums.account.StatusAccount;
 import lombok.Data;
 
 import java.util.UUID;
