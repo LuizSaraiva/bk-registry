@@ -22,5 +22,7 @@ rabbitmq:
     exchange: ex.registry
     queue:
       account: queue.registry.account
+      history-transaction: queue.registry.history-transaction
     routing:
       account: routing.registry.account
+      history-transaction: routing.registry.history-transaction

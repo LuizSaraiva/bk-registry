@@ -1,4 +1,4 @@
-package com.bk.registry.domain.services.account;
+package com.bk.registry.domain.services;
 
 import com.bk.registry.domain.entity.account.OutboxRegistry;
 

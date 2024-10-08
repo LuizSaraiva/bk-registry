@@ -1,4 +1,4 @@
-package com.bk.registry.domain.repositories.account;
+package com.bk.registry.domain.repositories;
 
 import com.bk.registry.domain.entity.account.OutboxRegistry;
 import org.springframework.data.jpa.repository.JpaRepository;

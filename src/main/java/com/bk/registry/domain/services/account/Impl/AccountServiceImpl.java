@@ -12,7 +12,7 @@ import com.bk.registry.domain.exceptions.AccountNotFoundException;
 import com.bk.registry.domain.exceptions.enums.ExceptionMessage;
 import com.bk.registry.domain.repositories.account.AccountRepository;
 import com.bk.registry.domain.services.account.AccountService;
-import com.bk.registry.domain.services.account.OutboxRegistryService;
+import com.bk.registry.domain.services.OutboxRegistryService;
 import com.bk.registry.mapper.AccountMessageMapper;
 import com.bk.registry.mapper.OutboxMapper;
 import com.bk.registry.mapper.StatusAccountMapper;

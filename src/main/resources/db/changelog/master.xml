@@ -8,5 +8,6 @@
 
     <include file="db/changelog/versions/v1/000001-create-account-table.xml" />
     <include file="db/changelog/versions/v1/000002-create-outbox-table.xml" />
+    <include file="db/changelog/versions/v1/000003-create-history-table.xml" />
 
 </databaseChangeLog>

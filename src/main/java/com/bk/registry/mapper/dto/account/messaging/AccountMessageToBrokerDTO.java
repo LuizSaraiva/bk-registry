@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 
 @Data
 @ToString
-public class MessageDTO implements Serializable {
+public class AccountMessageToBrokerDTO implements Serializable {
     private TypeMessageBroker type;
     @JsonRawValue
     private String account;

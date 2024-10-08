@@ -6,7 +6,9 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class HistoryTransactionRequestDto {
+public class HistoryTransactionResponseDto {
+
+    private UUID idHistory;
     private String description;
     private TypeHistoryTransaction typeHistoryTransaction;
 }

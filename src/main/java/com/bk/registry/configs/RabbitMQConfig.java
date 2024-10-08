@@ -20,16 +20,29 @@ public class RabbitMQConfig {
     @Value(value = "${rabbitmq.broker.queue.account}")
     private String queueRegistryAccountName;
 
+    @Value(value = "${rabbitmq.broker.queue.history-transaction}")
+    private String queueRegistryHistoryTransactionName;
+
     @Value(value = "${rabbitmq.broker.exchange}")
     private String exchangeRegistry;
 
     @Value(value = "${rabbitmq.broker.routing.account}")
     private String routingAccount;
 
+    @Value(value = "${rabbitmq.broker.routing.history-transaction}")
+    private String routingHistoryTransaction;
+
+
     @Bean
     public Queue queueRegistryAccount(){
         return new Queue(queueRegistryAccountName,true);
     }
+
+    @Bean
+    public Queue queueRegistryHistoryTransaction(){
+        return new Queue(queueRegistryHistoryTransactionName,true);
+    }
+
 
     @Bean
     public TopicExchange topicExchangeRegistryAccount(){
@@ -41,6 +54,13 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(queueRegistryAccount())
                 .to(topicExchangeRegistryAccount())
                 .with(routingAccount);
+    }
+
+    @Bean
+    public Binding bindingRegistryHistoryTransaction(){
+        return BindingBuilder.bind(queueRegistryHistoryTransaction())
+                .to(topicExchangeRegistryAccount())
+                .with(routingHistoryTransaction);
     }
 
     @Bean
