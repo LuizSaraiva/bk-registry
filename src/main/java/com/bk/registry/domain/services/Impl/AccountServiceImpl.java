@@ -71,10 +71,13 @@ public class AccountServiceImpl implements AccountService {
 
         final var accountSaved = setConfigsAndSaveAccount(account);
 
-        OutboxRegistry outboxRegistry = createOutbox(accountSaved, TypeEvent.CREATE);
-
-        outboxRegistryService.saveOutbox(outboxRegistry);
+        saveOutbox(accountSaved, TypeEvent.CREATE);
         return accountSaved;
+    }
+
+    private void saveOutbox(Account accountSaved, TypeEvent typeEvent) {
+        OutboxRegistry outboxRegistry = createOutbox(accountSaved, typeEvent);
+        outboxRegistryService.saveOutbox(outboxRegistry);
     }
 
     @Override
@@ -92,12 +95,15 @@ public class AccountServiceImpl implements AccountService {
         StatusAccount statusDomain = statusAccountMapper.statusApiToDomain(status);
         accountFound.get().setStatus(statusDomain);
         Account accountSaved = accountRepository.save(accountFound.get());
+        saveOutbox(accountSaved, TypeEvent.UPDATE);
     }
 
     @Override
     @Transactional
     public Account updateAccount(Account account) {
-        return accountRepository.save(account);
+        val accountSaved = accountRepository.save(account);
+        saveOutbox(accountSaved, TypeEvent.UPDATE);
+        return accountSaved;
     }
 
     @Override
