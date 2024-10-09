@@ -7,5 +7,5 @@ import lombok.Data;
 public class HistoryTransactionRequestUpdateDto {
 
     private String description;
-    private TypeHistoryTransaction typeHistoryTransaction;
+    private TypeHistoryTransaction type;
 }

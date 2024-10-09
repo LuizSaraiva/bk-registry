@@ -51,6 +51,11 @@ public class HistoryTransactionTransactionController implements HistoryTransacti
 
     @Override
     public ResponseEntity<?> updateHistory(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto) {
+        try{
+            historyTransactionService.updateHistoryTransaction(idHistory, historyTransactionRequestUpdateDto);
+        }catch (Exception ex){
+
+        }
         return null;
     }
 }

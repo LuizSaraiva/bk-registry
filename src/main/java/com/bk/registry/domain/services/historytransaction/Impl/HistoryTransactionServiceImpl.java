@@ -14,6 +14,7 @@ import com.bk.registry.mapper.HistoryTransactionMapper;
 import com.bk.registry.mapper.OutboxMapper;
 import com.bk.registry.mapper.dto.HistoryTransactionMessageMapper;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestDto;
+import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestUpdateDto;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionResponseDto;
 import com.bk.registry.mapper.dto.historytransaction.messaging.HistoryTransactionMessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -59,8 +60,12 @@ public class HistoryTransactionServiceImpl implements HistoryTransactionService 
     }
 
     @Override
-    public void updateHistoryTransaction(HistoryTransaction historyTransaction) {
-        historyTransactionRepository.save(historyTransaction);
+    public void updateHistoryTransaction(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto) {
+
+        val historyTransactionFound = getHistoryTransactionById(idHistory);
+
+        historyTransactionMapper.copyHistoryTransactionDtoUpdateToDomain(historyTransactionRequestUpdateDto, historyTransactionFound);
+        historyTransactionRepository.save(historyTransactionFound);
     }
 
     @Override
