@@ -60,12 +60,14 @@ public class HistoryTransactionServiceImpl implements HistoryTransactionService 
     }
 
     @Override
-    public void updateHistoryTransaction(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto) {
+    public HistoryTransactionResponseDto updateHistoryTransaction(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto) {
 
         val historyTransactionFound = getHistoryTransactionById(idHistory);
 
         historyTransactionMapper.copyHistoryTransactionDtoUpdateToDomain(historyTransactionRequestUpdateDto, historyTransactionFound);
-        historyTransactionRepository.save(historyTransactionFound);
+        val historySaved = historyTransactionRepository.save(historyTransactionFound);
+
+        return historyTransactionMapper.historyTransactionDomainToDto(historySaved);
     }
 
     @Override

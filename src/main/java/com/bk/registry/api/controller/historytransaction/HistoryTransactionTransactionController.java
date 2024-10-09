@@ -6,6 +6,7 @@ import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestDt
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestUpdateDto;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,10 +53,11 @@ public class HistoryTransactionTransactionController implements HistoryTransacti
     @Override
     public ResponseEntity<?> updateHistory(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto) {
         try{
-            historyTransactionService.updateHistoryTransaction(idHistory, historyTransactionRequestUpdateDto);
+            val historyTransactionResponseDto = historyTransactionService.updateHistoryTransaction(idHistory, historyTransactionRequestUpdateDto);
+            return ResponseEntity.ok(historyTransactionResponseDto);
         }catch (Exception ex){
-
+            log.error(ex.getMessage());
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
-        return null;
     }
 }

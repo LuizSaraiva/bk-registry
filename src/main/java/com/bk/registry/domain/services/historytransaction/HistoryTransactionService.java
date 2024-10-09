@@ -15,7 +15,7 @@ public interface HistoryTransactionService {
 
     List<HistoryTransactionResponseDto> getAllHistoryTransaction();
     HistoryTransaction getHistoryTransactionById(UUID id);
-    void updateHistoryTransaction(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto);
+    HistoryTransactionResponseDto updateHistoryTransaction(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto);
     HistoryTransaction saveHistoryTransaction(HistoryTransactionRequestDto historyTransactionRequestDto);
 
 }
