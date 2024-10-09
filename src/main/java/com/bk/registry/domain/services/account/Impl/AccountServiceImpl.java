@@ -7,9 +7,9 @@ import com.bk.registry.domain.entity.account.OutboxRegistry;
 import com.bk.registry.domain.enums.account.StatusAccount;
 import com.bk.registry.domain.enums.TypeEvent;
 import com.bk.registry.domain.enums.TypeOutbox;
-import com.bk.registry.domain.exceptions.AccountAlreadyExistsException;
-import com.bk.registry.domain.exceptions.AccountNotFoundException;
-import com.bk.registry.domain.exceptions.enums.ExceptionMessage;
+import com.bk.registry.domain.exceptions.account.AccountAlreadyExistsException;
+import com.bk.registry.domain.exceptions.account.AccountNotFoundException;
+import com.bk.registry.domain.exceptions.account.enums.AccountExceptionMessage;
 import com.bk.registry.domain.repositories.account.AccountRepository;
 import com.bk.registry.domain.services.account.AccountService;
 import com.bk.registry.domain.services.OutboxRegistryService;
@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
     public Account saveAccount(Account account) {
 
         if (checkBranchAccount(account) || checkDocument(account)) {
-            throw new AccountAlreadyExistsException(ExceptionMessage.ACCOUNT_ALREADY_EXISTS.getMessage());
+            throw new AccountAlreadyExistsException(AccountExceptionMessage.ACCOUNT_ALREADY_EXISTS.getMessage());
         }
 
         final var accountSaved = setConfigsAndSaveAccount(account);
@@ -83,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
     public Optional<Account> getAccountByBranchAndAccountNumber(Integer branch, Long account) {
 
         return Optional.ofNullable(accountRepository.findByBranchAndAccount(branch, account).orElseThrow(() ->
-                new AccountNotFoundException(ExceptionMessage.ACCOUNT_NOT_FOUND.getMessage())));
+                new AccountNotFoundException(AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMessage())));
     }
 
     @Override

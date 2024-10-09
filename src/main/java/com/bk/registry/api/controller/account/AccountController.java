@@ -1,7 +1,7 @@
 package com.bk.registry.api.controller.account;
 
 import com.bk.registry.domain.entity.account.Account;
-import com.bk.registry.domain.exceptions.AccountAlreadyExistsException;
+import com.bk.registry.domain.exceptions.account.AccountAlreadyExistsException;
 import com.bk.registry.domain.services.account.AccountService;
 import com.bk.registry.mapper.AccountMapper;
 import com.bk.registry.mapper.StatusAccountMapper;

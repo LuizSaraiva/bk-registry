@@ -1,4 +1,6 @@
-package com.bk.registry.domain.exceptions;
+package com.bk.registry.domain.exceptions.account;
+
+import com.bk.registry.domain.exceptions.BusinessException;
 
 import java.util.UUID;
 

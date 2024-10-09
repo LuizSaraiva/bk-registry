@@ -1,8 +1,6 @@
-package com.bk.registry.domain.exceptions;
+package com.bk.registry.domain.exceptions.account;
 
-import com.bk.registry.domain.exceptions.enums.ExceptionMessage;
-
-import java.util.UUID;
+import com.bk.registry.domain.exceptions.BusinessException;
 
 public class AccountAlreadyExistsException extends BusinessException {
 

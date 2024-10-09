@@ -5,6 +5,8 @@ import com.bk.registry.domain.entity.account.OutboxRegistry;
 import com.bk.registry.domain.entity.historytransaction.HistoryTransaction;
 import com.bk.registry.domain.enums.TypeEvent;
 import com.bk.registry.domain.enums.TypeOutbox;
+import com.bk.registry.domain.exceptions.historytransaction.HistoryTransactionNotFoundException;
+import com.bk.registry.domain.exceptions.historytransaction.enums.HistoryTransactionExceptionMessage;
 import com.bk.registry.domain.repositories.historytransaction.HistoryTransactionRepository;
 import com.bk.registry.domain.services.OutboxRegistryService;
 import com.bk.registry.domain.services.historytransaction.HistoryTransactionService;
@@ -53,7 +55,7 @@ public class HistoryTransactionServiceImpl implements HistoryTransactionService 
     @Override
     public HistoryTransaction getHistoryTransactionById(UUID id) {
         return historyTransactionRepository.findById(id).orElseThrow(
-        );
+                () -> new HistoryTransactionNotFoundException(id));
     }
 
     @Override

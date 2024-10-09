@@ -1,5 +1,6 @@
 package com.bk.registry.api.controller.historytransaction;
 
+import com.bk.registry.domain.exceptions.historytransaction.HistoryTransactionNotFoundException;
 import com.bk.registry.domain.services.historytransaction.HistoryTransactionService;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestDto;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestUpdateDto;
@@ -30,7 +31,11 @@ public class HistoryTransactionTransactionController implements HistoryTransacti
 
     @Override
     public ResponseEntity<?> getHistory(UUID idHistory) {
-        return null;
+        try {
+            return ResponseEntity.ok(historyTransactionService.getHistoryTransactionById(idHistory));
+        }catch (HistoryTransactionNotFoundException ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @Override

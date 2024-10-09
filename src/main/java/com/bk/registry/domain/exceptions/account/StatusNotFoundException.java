@@ -1,6 +1,6 @@
-package com.bk.registry.domain.exceptions;
+package com.bk.registry.domain.exceptions.account;
 
-import java.util.UUID;
+import com.bk.registry.domain.exceptions.BusinessException;
 
 public class StatusNotFoundException extends BusinessException {
 
