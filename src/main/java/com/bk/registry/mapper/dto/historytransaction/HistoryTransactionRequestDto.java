@@ -8,5 +8,5 @@ import java.util.UUID;
 @Data
 public class HistoryTransactionRequestDto {
     private String description;
-    private TypeHistoryTransaction typeHistoryTransaction;
+    private TypeHistoryTransaction type;
 }

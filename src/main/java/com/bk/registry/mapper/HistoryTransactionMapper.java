@@ -12,7 +12,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface HistoryTransactionMapper {
 
-    @Mapping(source = "typeHistoryTransaction", target = "type")
     HistoryTransaction historyTransactionDtoToDomain(HistoryTransactionRequestDto historyTransactionRequestDto);
     HistoryTransactionResponseDto historyTransactionDomainToDto(HistoryTransaction historyTransaction);
     List<HistoryTransactionResponseDto> listHistoryTransactionDomainToDto(List<HistoryTransaction> historyTransactionList);
