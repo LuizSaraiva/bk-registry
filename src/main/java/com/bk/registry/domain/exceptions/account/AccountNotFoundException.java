@@ -19,7 +19,7 @@ public class AccountNotFoundException extends BusinessException {
     }
 
     public AccountNotFoundException(Integer branch, Long account) {
-        super(String.format("Account: branch %s , account %s not found!",
+        super(String.format("account %s/%s not found!",
                 branch, account));
     }
 }
