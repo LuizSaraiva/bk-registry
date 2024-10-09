@@ -34,8 +34,13 @@ public class HistoryTransactionTransactionController implements HistoryTransacti
 
     @Override
     public ResponseEntity<?> createHistory(HistoryTransactionRequestDto historyTransactionRequestDto) {
-        val historyTransaction = historyTransactionService.saveHistoryTransaction(historyTransactionRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(historyTransaction);
+        log.info("Received request to create history: {}", historyTransactionRequestDto);
+        try {
+            val historyTransaction = historyTransactionService.saveHistoryTransaction(historyTransactionRequestDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(historyTransaction);
+        }catch (Exception ex){
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
     }
 
     @Override

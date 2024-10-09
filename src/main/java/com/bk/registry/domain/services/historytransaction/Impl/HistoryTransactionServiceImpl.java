@@ -1,7 +1,6 @@
 package com.bk.registry.domain.services.historytransaction.Impl;
 
 import com.bk.registry.convert.JsonConverter;
-import com.bk.registry.domain.entity.account.Account;
 import com.bk.registry.domain.entity.account.OutboxRegistry;
 import com.bk.registry.domain.entity.historytransaction.HistoryTransaction;
 import com.bk.registry.domain.enums.TypeEvent;
@@ -12,7 +11,6 @@ import com.bk.registry.domain.services.historytransaction.HistoryTransactionServ
 import com.bk.registry.mapper.HistoryTransactionMapper;
 import com.bk.registry.mapper.OutboxMapper;
 import com.bk.registry.mapper.dto.HistoryTransactionMessageMapper;
-import com.bk.registry.mapper.dto.account.messaging.AccountMessageDTO;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestDto;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionResponseDto;
 import com.bk.registry.mapper.dto.historytransaction.messaging.HistoryTransactionMessageDTO;
@@ -20,7 +18,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -31,30 +28,21 @@ import java.util.UUID;
 @Log4j2
 public class HistoryTransactionServiceImpl implements HistoryTransactionService {
 
-    @Autowired
     private HistoryTransactionRepository historyTransactionRepository;
-    @Autowired
     private HistoryTransactionMessageMapper historyTransactionMessageMapper;
-    @Autowired
     private HistoryTransactionMapper historyTransactionMapper;
-    @Autowired
     private OutboxRegistryService outboxRegistryService;
-//    @Autowired
-//    private HistoryTransactionMessageDTO messageDTO;
-    @Autowired
     private OutboxMapper outboxMapper;
-    @Autowired
     private JsonConverter jsonConverter;
 
-//    public HistoryTransactionServiceImpl(HistoryTransactionRepository historyTransactionRepository, HistoryTransactionMapper historyTransactionMapper, HistoryTransactionMessageMapper historyTransactionMapper1, HistoryTransactionMessageMapper historyTransactionMessageMapper, HistoryTransactionMapper historyTransactionMapper2, OutboxRegistryService outboxRegistryService, HistoryTransactionMessageDTO messageDTO, OutboxMapper outboxMapper, JsonConverter jsonConverter) {
-//        this.historyTransactionRepository = historyTransactionRepository;
-//        this.historyTransactionMessageMapper = historyTransactionMessageMapper;
-//        this.historyTransactionMapper = historyTransactionMapper2;
-//        this.outboxRegistryService = outboxRegistryService;
-//        this.messageDTO = messageDTO;
-//        this.outboxMapper = outboxMapper;
-//        this.jsonConverter = jsonConverter;
-//    }
+    public HistoryTransactionServiceImpl(HistoryTransactionRepository historyTransactionRepository, HistoryTransactionMessageMapper historyTransactionMessageMapper, HistoryTransactionMapper historyTransactionMapper, OutboxRegistryService outboxRegistryService, OutboxMapper outboxMapper, JsonConverter jsonConverter) {
+        this.historyTransactionRepository = historyTransactionRepository;
+        this.historyTransactionMessageMapper = historyTransactionMessageMapper;
+        this.historyTransactionMapper = historyTransactionMapper;
+        this.outboxRegistryService = outboxRegistryService;
+        this.outboxMapper = outboxMapper;
+        this.jsonConverter = jsonConverter;
+    }
 
     @Override
     public List<HistoryTransactionResponseDto> getAllHistoryTransaction() {
@@ -65,7 +53,7 @@ public class HistoryTransactionServiceImpl implements HistoryTransactionService 
     @Override
     public HistoryTransaction getHistoryTransactionById(UUID id) {
         return historyTransactionRepository.findById(id).orElseThrow(
-                );
+        );
     }
 
     @Override
@@ -80,7 +68,7 @@ public class HistoryTransactionServiceImpl implements HistoryTransactionService 
         historyTransaction.setCreate_date(OffsetDateTime.now());
         val historyTransactionSaved = historyTransactionRepository.save(historyTransaction);
 
-        saveOutbox(historyTransactionSaved,TypeEvent.CREATE);
+        saveOutbox(historyTransactionSaved, TypeEvent.CREATE);
         return historyTransactionSaved;
     }
 
