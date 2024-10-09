@@ -34,11 +34,11 @@ public class AccountController implements AccountControllerApi {
     @Override
     public ResponseEntity<?> getAccounts() {
         log.info("Received request to get all accounts.");
-        try{
+        try {
             List<AccountResponseDTO> accountResponseDTOList = accountService.getAccounts();
             log.info("Response request to get all accounts.");
             return ResponseEntity.ok(accountResponseDTOList);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.info(ex.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -48,11 +48,11 @@ public class AccountController implements AccountControllerApi {
     public ResponseEntity<?> getAccount(Integer branch, Long account) {
         log.info("Received request to get account.");
 
-        try{
+        try {
             AccountResponseDTO accountResponseDTO = accountService.getAccountByBranchAndAccountNumber(branch, account);
             log.info("Response request to get account.");
             return ResponseEntity.ok().body(accountResponseDTO);
-        }catch (AccountNotFoundException ex){
+        } catch (AccountNotFoundException ex) {
             log.info(ex.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -62,11 +62,11 @@ public class AccountController implements AccountControllerApi {
     public ResponseEntity<?> createAccount(@Valid AccountRequestDTO accountRequestDTO) {
 
         log.info("Received request to create account: {}", accountRequestDTO);
-        try{
+        try {
             AccountResponseDTO accountSaved = accountService.saveAccount(accountRequestDTO);
             log.info("Response account created successfully: {}", accountSaved);
             return ResponseEntity.status(HttpStatus.CREATED).body(accountSaved);
-        }catch (AccountAlreadyExistsException ex){
+        } catch (AccountAlreadyExistsException ex) {
             log.error(ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
@@ -74,17 +74,31 @@ public class AccountController implements AccountControllerApi {
 
     @Override
     public ResponseEntity<?> updateAccount(UUID id, AccountRequestUpdateDTO accountRequestUpdateDTO) {
-        AccountResponseDTO accountSaved = accountService.updateAccount(id, accountRequestUpdateDTO);
-        return ResponseEntity.ok(accountSaved);
+
+        log.info("Received request to update account: {}", id);
+        try {
+            AccountResponseDTO accountSaved = accountService.updateAccount(id, accountRequestUpdateDTO);
+            log.info("Account {} was updated: {}", id, accountSaved);
+            return ResponseEntity.ok(accountSaved);
+        } catch (AccountNotFoundException e) {
+            log.error("Account {} not found!", id);
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            log.error("Error when trying to update account: {}", id);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @Override
     public ResponseEntity<?> updateStatusAccount(UUID id, @Valid UpdateStatusDTO updateStatusDTO) {
-        try{
-            accountService.updateStatusAccount(updateStatusDTO.getStatus(),id);
+        log.info("Received request to update account status: {}", id);
+        try {
+            accountService.updateStatusAccount(updateStatusDTO.getStatus(), id);
+            log.info("Status account {} updated!", id);
             return ResponseEntity.ok().build();
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("");
+        } catch (Exception e) {
+            log.error("Error when trying to update account: {}", id);
+            return ResponseEntity.badRequest().build();
         }
     }
 }
