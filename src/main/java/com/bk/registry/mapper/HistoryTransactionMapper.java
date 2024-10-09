@@ -1,10 +1,8 @@
 package com.bk.registry.mapper;
 
 import com.bk.registry.domain.entity.historytransaction.HistoryTransaction;
-import com.bk.registry.domain.repositories.historytransaction.HistoryTransactionRepository;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestDto;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionResponseDto;
-import com.bk.registry.mapper.dto.historytransaction.messaging.HistoryTransactionMessageDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;

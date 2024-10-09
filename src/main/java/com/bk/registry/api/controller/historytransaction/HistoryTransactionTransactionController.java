@@ -5,7 +5,6 @@ import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestDt
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestUpdateDto;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +17,15 @@ import java.util.UUID;
 @Log4j2
 public class HistoryTransactionTransactionController implements HistoryTransactionControllerApi {
 
-    @Autowired
     private HistoryTransactionService historyTransactionService;
 
+    public HistoryTransactionTransactionController(HistoryTransactionService historyTransactionService) {
+        this.historyTransactionService = historyTransactionService;
+    }
 
     @Override
     public ResponseEntity<?> getAllHistories() {
-        return null;
+        return ResponseEntity.ok(historyTransactionService.getAllHistoryTransaction());
     }
 
     @Override
