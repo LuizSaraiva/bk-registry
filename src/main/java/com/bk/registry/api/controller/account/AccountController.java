@@ -1,9 +1,8 @@
 package com.bk.registry.api.controller.account;
 
-import com.bk.registry.domain.entity.account.Account;
 import com.bk.registry.domain.exceptions.account.AccountAlreadyExistsException;
+import com.bk.registry.domain.exceptions.account.AccountNotFoundException;
 import com.bk.registry.domain.services.account.AccountService;
-import com.bk.registry.mapper.AccountMapper;
 import com.bk.registry.mapper.StatusAccountMapper;
 import com.bk.registry.mapper.dto.account.AccountRequestDTO;
 import com.bk.registry.mapper.dto.account.AccountRequestUpdateDTO;
@@ -11,14 +10,12 @@ import com.bk.registry.mapper.dto.account.AccountResponseDTO;
 import com.bk.registry.mapper.dto.account.UpdateStatusDTO;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,49 +23,49 @@ import java.util.UUID;
 @Log4j2
 public class AccountController implements AccountControllerApi {
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+    private final StatusAccountMapper statusAccountMapper;
 
-    @Autowired
-    AccountMapper accountMapper;
-
-    @Autowired
-    StatusAccountMapper statusAccountMapper;
+    public AccountController(AccountService accountService, StatusAccountMapper statusAccountMapper) {
+        this.accountService = accountService;
+        this.statusAccountMapper = statusAccountMapper;
+    }
 
     @Override
     public ResponseEntity<?> getAccounts() {
-
         log.info("Received request to get all accounts.");
-        val accountResponses = accountMapper.listAccountDomainToResponseDto(accountService.getAccounts());
-        log.info("Response request to get all accounts.");
-        return ResponseEntity.ok(accountResponses);
+        try{
+            List<AccountResponseDTO> accountResponseDTOList = accountService.getAccounts();
+            log.info("Response request to get all accounts.");
+            return ResponseEntity.ok(accountResponseDTOList);
+        }catch (Exception ex){
+            log.info(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @Override
     public ResponseEntity<?> getAccount(Integer branch, Long account) {
         log.info("Received request to get account.");
 
-        val accountByBranchAndAccountNumber = accountService.getAccountByBranchAndAccountNumber(branch, account);
-
-        if (!accountByBranchAndAccountNumber.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found.");
+        try{
+            AccountResponseDTO accountResponseDTO = accountService.getAccountByBranchAndAccountNumber(branch, account);
+            log.info("Response request to get account.");
+            return ResponseEntity.ok().body(accountResponseDTO);
+        }catch (AccountNotFoundException ex){
+            log.info(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-        val accountResponses = accountMapper.accountDomainToResponseDto(accountByBranchAndAccountNumber.get());
-        log.info("Response request to get account.");
-        return ResponseEntity.ok(accountResponses);
-
     }
 
     @Override
     public ResponseEntity<?> createAccount(@Valid AccountRequestDTO accountRequestDTO) {
 
         log.info("Received request to create account: {}", accountRequestDTO);
-        Account account = accountMapper.accountDtoToDomain(accountRequestDTO);
         try{
-            Account accountSaved = accountService.saveAccount(account);
-            AccountResponseDTO accountResponse = accountMapper.accountDomainToResponseDto(accountSaved);
-            log.info("Response account created successfully: {}", accountResponse);
-            return ResponseEntity.status(HttpStatus.CREATED).body(accountResponse);
+            AccountResponseDTO accountSaved = accountService.saveAccount(accountRequestDTO);
+            log.info("Response account created successfully: {}", accountSaved);
+            return ResponseEntity.status(HttpStatus.CREATED).body(accountSaved);
         }catch (AccountAlreadyExistsException ex){
             log.error(ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -77,16 +74,7 @@ public class AccountController implements AccountControllerApi {
 
     @Override
     public ResponseEntity<?> updateAccount(UUID id, AccountRequestUpdateDTO accountRequestUpdateDTO) {
-
-        Optional<Account> accountFound = accountService.findAccountBydId(id);
-
-        if(!accountFound.isPresent()){
-            return ResponseEntity.notFound().build();
-        }
-        accountMapper.accountDtoUpdateToDomain(accountRequestUpdateDTO, accountFound.get());
-
-        val accountSaved = accountService.updateAccount(accountFound.get());
-
+        AccountResponseDTO accountSaved = accountService.updateAccount(id, accountRequestUpdateDTO);
         return ResponseEntity.ok(accountSaved);
     }
 

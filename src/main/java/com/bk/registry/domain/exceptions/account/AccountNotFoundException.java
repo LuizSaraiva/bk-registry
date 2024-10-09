@@ -14,5 +14,12 @@ public class AccountNotFoundException extends BusinessException {
         super(message, cause);
     }
 
-    public AccountNotFoundException(UUID id){super(String.format("Account not found %s!",id.toString()));}
+    public AccountNotFoundException(UUID id) {
+        super(String.format("Account not found %s!", id.toString()));
+    }
+
+    public AccountNotFoundException(Integer branch, Long account) {
+        super(String.format("Account: branch %s , account %s not found!",
+                branch, account));
+    }
 }

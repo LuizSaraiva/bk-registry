@@ -4,65 +4,68 @@ import com.bk.registry.api.enums.account.StatusAccountApi;
 import com.bk.registry.convert.JsonConverter;
 import com.bk.registry.domain.entity.account.Account;
 import com.bk.registry.domain.entity.account.OutboxRegistry;
-import com.bk.registry.domain.enums.account.StatusAccount;
 import com.bk.registry.domain.enums.TypeEvent;
 import com.bk.registry.domain.enums.TypeOutbox;
+import com.bk.registry.domain.enums.account.StatusAccount;
 import com.bk.registry.domain.exceptions.account.AccountAlreadyExistsException;
 import com.bk.registry.domain.exceptions.account.AccountNotFoundException;
 import com.bk.registry.domain.exceptions.account.enums.AccountExceptionMessage;
 import com.bk.registry.domain.repositories.account.AccountRepository;
-import com.bk.registry.domain.services.account.AccountService;
 import com.bk.registry.domain.services.OutboxRegistryService;
+import com.bk.registry.domain.services.account.AccountService;
+import com.bk.registry.mapper.AccountMapper;
 import com.bk.registry.mapper.AccountMessageMapper;
 import com.bk.registry.mapper.OutboxMapper;
 import com.bk.registry.mapper.StatusAccountMapper;
+import com.bk.registry.mapper.dto.account.AccountRequestDTO;
+import com.bk.registry.mapper.dto.account.AccountRequestUpdateDTO;
+import com.bk.registry.mapper.dto.account.AccountResponseDTO;
 import com.bk.registry.mapper.dto.account.messaging.AccountMessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @Log4j2
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
-    private OutboxMapper outboxMapper;
-
-    @Autowired
-    private AccountMessageMapper accountMessageMapper;
-
-    @Autowired
-    JsonConverter jsonConverter;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private StatusAccountMapper statusAccountMapper;
-
-    @Autowired
-    OutboxRegistryService outboxRegistryService;
+    private final OutboxMapper outboxMapper;
+    private final AccountMessageMapper accountMessageMapper;
+    private final JsonConverter jsonConverter;
+    private final AccountRepository accountRepository;
+    private final StatusAccountMapper statusAccountMapper;
+    private final OutboxRegistryService outboxRegistryService;
+    private final AccountMapper accountMapper;
 
     @Value(value = "${registry.account.default-status-create}")
     private StatusAccount defaultStatusAccount;
 
+    public AccountServiceImpl(OutboxMapper outboxMapper, AccountMessageMapper accountMessageMapper, JsonConverter jsonConverter, AccountRepository accountRepository, StatusAccountMapper statusAccountMapper, OutboxRegistryService outboxRegistryService, AccountMapper accountMapper) {
+        this.outboxMapper = outboxMapper;
+        this.accountMessageMapper = accountMessageMapper;
+        this.jsonConverter = jsonConverter;
+        this.accountRepository = accountRepository;
+        this.statusAccountMapper = statusAccountMapper;
+        this.outboxRegistryService = outboxRegistryService;
+        this.accountMapper = accountMapper;
+    }
+
     @Override
-    public List<Account> getAccounts() {
-        return accountRepository.findAll();
+    public List<AccountResponseDTO> getAccounts() {
+        return accountMapper.listAccountDomainToResponseDto(accountRepository.findAll());
     }
 
     @Override
     @Transactional
-    public Account saveAccount(Account account) {
+    public AccountResponseDTO saveAccount(AccountRequestDTO accountRequestDTO) {
+
+        Account account = accountMapper.accountDtoToDomain(accountRequestDTO);
 
         if (checkBranchAccount(account) || checkDocument(account)) {
             throw new AccountAlreadyExistsException(AccountExceptionMessage.ACCOUNT_ALREADY_EXISTS.getMessage());
@@ -71,7 +74,8 @@ public class AccountServiceImpl implements AccountService {
         final var accountSaved = setConfigsAndSaveAccount(account);
 
         saveOutbox(accountSaved, TypeEvent.CREATE);
-        return accountSaved;
+
+        return accountMapper.accountDomainToResponseDto(accountSaved);
     }
 
     private void saveOutbox(Account accountSaved, TypeEvent typeEvent) {
@@ -80,36 +84,41 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> getAccountByBranchAndAccountNumber(Integer branch, Long account) {
+    public AccountResponseDTO getAccountByBranchAndAccountNumber(Integer branch, Long account) {
 
-        return Optional.ofNullable(accountRepository.findByBranchAndAccount(branch, account).orElseThrow(() ->
-                new AccountNotFoundException(AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMessage())));
+        Account accountFound = accountRepository.findByBranchAndAccount(branch, account).orElseThrow(
+                () -> new AccountNotFoundException(branch, account));
+
+        return accountMapper.accountDomainToResponseDto(accountFound);
     }
 
     @Override
     @Transactional
     public void updateStatusAccount(StatusAccountApi status, UUID id) {
-        Optional<Account> accountFound = findAccountBydId(id);
+        Account accountFound = findAccountBydId(id);
 
         StatusAccount statusDomain = statusAccountMapper.statusApiToDomain(status);
-        accountFound.get().setStatus(statusDomain);
-        Account accountSaved = accountRepository.save(accountFound.get());
+        accountFound.setStatus(statusDomain);
+        Account accountSaved = accountRepository.save(accountFound);
         saveOutbox(accountSaved, TypeEvent.UPDATE);
     }
 
     @Override
     @Transactional
-    public Account updateAccount(Account account) {
-        val accountSaved = accountRepository.save(account);
+    public AccountResponseDTO updateAccount(UUID id, AccountRequestUpdateDTO accountRequestUpdateDTO) {
+
+        Account accountFound = findAccountBydId(id);
+
+        accountMapper.copyAccountDtoUpdateToDomain(accountRequestUpdateDTO, accountFound);
+        Account accountSaved = accountRepository.save(accountFound);
         saveOutbox(accountSaved, TypeEvent.UPDATE);
-        return accountSaved;
+        return accountMapper.accountDomainToResponseDto(accountSaved);
     }
 
     @Override
-    public Optional<Account> findAccountBydId(UUID id) {
-        return Optional.ofNullable(accountRepository.findById(id).orElseThrow(
-                () -> new AccountNotFoundException(id)
-        ));
+    public Account findAccountBydId(UUID id) {
+        return accountRepository.findById(id).orElseThrow(
+                () -> new AccountNotFoundException(id));
     }
 
     public boolean checkBranchAccount(Account account) {
@@ -143,7 +152,6 @@ public class AccountServiceImpl implements AccountService {
     private Account setConfigsAndSaveAccount(Account account) {
         account.setCreate_date(OffsetDateTime.now());
         account.setStatus(defaultStatusAccount);
-        val accountSaved = accountRepository.save(account);
-        return accountSaved;
+        return accountRepository.save(account);
     }
 }
