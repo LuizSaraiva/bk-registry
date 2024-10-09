@@ -67,6 +67,7 @@ public class HistoryTransactionServiceImpl implements HistoryTransactionService 
         historyTransactionMapper.copyHistoryTransactionDtoUpdateToDomain(historyTransactionRequestUpdateDto, historyTransactionFound);
         val historySaved = historyTransactionRepository.save(historyTransactionFound);
 
+        saveOutbox(historySaved, TypeEvent.UPDATE);
         return historyTransactionMapper.historyTransactionDomainToDto(historySaved);
     }
 
