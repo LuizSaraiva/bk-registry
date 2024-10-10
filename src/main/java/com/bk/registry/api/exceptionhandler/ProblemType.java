@@ -8,7 +8,8 @@ public enum ProblemType {
     SYSTEM_ERROR("/system-error", "System error"),
     INVALID_DATA("/invalid-data", "Invalid data"),
     NOT_FOUND("/resource-not-found","Resource not found"),
-    ALREAD_EXISTS("/resource-already-exists","Resource already exist")
+    ALREAD_EXISTS("/resource-already-exists","Resource already exist"),
+    INCOMPREHENSIBLE_MESSAGE("/incomprehensible-message","Incomprehensible message")
 ;
 
     private String title;
