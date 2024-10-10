@@ -54,15 +54,9 @@ public class HistoryTransactionTransactionController implements HistoryTransacti
 
     @Override
     public ResponseEntity<?> updateHistory(UUID idHistory, HistoryTransactionRequestUpdateDto historyTransactionRequestUpdateDto) {
-
         log.info("Received request to update history: {}", idHistory);
-        try {
-            val historyTransactionResponseDto = historyTransactionService.updateHistoryTransaction(idHistory, historyTransactionRequestUpdateDto);
-            log.info("Response request to update history {} : {}", idHistory, historyTransactionResponseDto);
-            return ResponseEntity.ok(historyTransactionResponseDto);
-        } catch (Exception ex) {
-            log.error(ex.getMessage());
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        HistoryTransactionResponseDto historyTransactionResponseDto = historyTransactionService.updateHistoryTransaction(idHistory, historyTransactionRequestUpdateDto);
+        log.info("Response request to update history {} : {}", idHistory, historyTransactionResponseDto);
+        return ResponseEntity.ok(historyTransactionResponseDto);
     }
 }
