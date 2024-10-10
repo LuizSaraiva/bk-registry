@@ -6,7 +6,9 @@ import com.bk.registry.domain.services.historytransaction.HistoryTransactionServ
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestDto;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionRequestUpdateDto;
 import com.bk.registry.mapper.dto.historytransaction.HistoryTransactionResponseDto;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;

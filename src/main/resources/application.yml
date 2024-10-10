@@ -26,3 +26,11 @@ rabbitmq:
     routing:
       account: routing.registry.account
       history-transaction: routing.registry.history-transaction
+
+logging:
+  pattern:
+    level: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5p [%X{traceId},%X{spanId}] %c{1}:%L - %m%n"
+
+management:
+  tracing:
+    enabled: true
