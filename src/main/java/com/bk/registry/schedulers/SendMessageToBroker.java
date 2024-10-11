@@ -50,7 +50,7 @@ public class SendMessageToBroker {
         log.info(String.format("%s messages found to be sent to the broker", outboxNotSent.size()));
 
         try {
-            outboxNotSent.forEach(outbox -> {setRoutingKeyAndSendMessage(outbox);});
+            outboxNotSent.forEach(this::setRoutingKeyAndSendMessage);
         } catch (RuntimeException ex) {
             log.error(ex);
         }
@@ -63,20 +63,28 @@ public class SendMessageToBroker {
         switch (outboxRegistryType) {
             case ACCOUNT -> {
                 AccountMessageToBrokerDTO accountMessageToBrokerDTO = messageMapper.accountMessageDTOToMessageBroker(outboxRegistry);
-                eventPublisher.publisherEvent(exchangeRegistry, routingAccount, accountMessageToBrokerDTO);
-                outboxRegistry.setSent(true);
-                outboxRegistry.setUpdate_date(OffsetDateTime.now());
-                outboxRegistryService.saveOutbox(outboxRegistry);
+                sendMessageToBroker(exchangeRegistry, routingAccount, accountMessageToBrokerDTO);
+                setMessageOutboxSent(outboxRegistry);
             }
             case HISTORY -> {
                 HistoryTransactionMessageToBrokerDTO historyTransactionMessageToBrokerDTO = historyTransactionMessageMapper.historyTransactionMessageDTOToMessageBroker(outboxRegistry);
-                eventPublisher.publisherEvent(exchangeRegistry, routingHistoryTransaction, historyTransactionMessageToBrokerDTO);
-                outboxRegistry.setSent(true);
-                outboxRegistry.setUpdate_date(OffsetDateTime.now());
-                outboxRegistryService.saveOutbox(outboxRegistry);
+                sendMessageToBroker(exchangeRegistry, routingHistoryTransaction, historyTransactionMessageToBrokerDTO);
+                setMessageOutboxSent(outboxRegistry);
             }
             default -> log.error("Routing not found!");
 
         }
     }
+
+    private void sendMessageToBroker(String exchange, String routing, Object object) {
+        eventPublisher.publisherEvent(exchange, routing, object);
+    }
+
+    private void setMessageOutboxSent(OutboxRegistry outboxRegistry) {
+        outboxRegistry.setSent(true);
+        outboxRegistry.setUpdate_date(OffsetDateTime.now());
+        outboxRegistryService.saveOutbox(outboxRegistry);
+    }
+
+
 }
